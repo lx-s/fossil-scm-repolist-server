@@ -1,22 +1,18 @@
 FROM alpine:3.12
 
-ENV USERNAME __fossil
+ENV USERNAME=fossil \
+    FOSSIL_ARCH=x64 \
+    FOSSIL_VERSION=2.11.1
 
-RUN addgroup -Sg 400 g$USERNAME \
-  && adduser -Su 400 -G g$USERNAME $USERNAME \
-  && apk add --no-cache alpine-sdk zlib-dev openssl-dev tcl fossil \
-  && mkdir -p /usr/local/src/fossils/fossil/build \
-  && cd /usr/local/src/fossils \
-  && fossil clone http://www.fossil-scm.org/fossil fossil.fossil --user $USERNAME \
-  && cd fossil \
-  && fossil open ../fossil.fossil \
-  && cd build \
-  && ../configure --static \
-  && make \
-  && make install \
-  && cd /tmp \
-  && rm -fr /usr/local/src \
-  && apk del --purge --no-cache fossil alpine-sdk zlib-dev openssl-dev tcl \
+RUN addgroup -Sg 400 $USERNAME \
+  && adduser -Su 400 -G $USERNAME $USERNAME \
+  && mkdir /fossils \
+  && chown -R $USERNAME:$USERNAME /fossils \
+  && apk add --no-cache curl \
+  && curl -fsSLo /tmp/fossil.tar.gz https://www.fossil-scm.org/home/uv/fossil-linux-$FOSSIL_ARCH-$FOSSIL_VERSION.tar.gz \
+  && tar xf /tmp/fossil.tar.gz -C /opt \
+  && rm /tmp/fossil.tar.gz \
+  && apk del --purge --no-cache curl \
   && rm -f /var/cache/apk/*
 
 VOLUME ["/fossils"]
@@ -25,6 +21,6 @@ WORKDIR ["/fossils"]
 
 EXPOSE 8181
 
-ENTRYPOINT ["/usr/local/bin/fossil"]
+ENTRYPOINT ["/opt/fossil"]
 
 CMD ["server","--repolist","--port","8181","--skin","ardoise","/fossils"]
