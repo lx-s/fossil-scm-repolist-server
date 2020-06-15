@@ -3,32 +3,22 @@ FROM alpine:3.12
 ENV USERNAME=fossil \
     FOSSIL_VERSION=2.11.1
 
-RUN  addgroup -Sg 400 $USERNAME \
-  && adduser -Su 400 -G $USERNAME $USERNAME \
-  && mkdir /fossils \
-  && chown -R $USERNAME:$USERNAME /fossils \
-  && apk add --no-cache \
-        curl gcc make tcl \
-        musl-dev \
-        openssl-dev zlib-dev \
-        openssl-libs-static zlib-static \
-  && curl -fsSLo /tmp/fossil-src.tar.gz https://www.fossil-scm.org/index.html/tarball/fossil-src.tar.gz?name=fossil-src&r=version-$FOSSIL_VERSION \
-  && tar xvf /tmp/fossil-src.tar.gz -C /tmp/ \
-  && cd /tmp/fossil-src/ \
-  && ./configure \
-        --static \
-        --disable-fusefs \
-        --with-th1-docs \
-        --with-th1-hooks \
+RUN addgroup -Sg 400 g$USERNAME \
+  && adduser -Su 400 -G g$USERNAME $USERNAME \
+  && apk add --no-cache alpine-sdk zlib-dev openssl-dev tcl fossil \
+  && mkdir -p /usr/local/src/fossils/fossil/build \
+  && cd /usr/local/src/fossils \
+  && fossil clone http://www.fossil-scm.org/fossil fossil.fossil --user $USERNAME \
+  && cd fossil \
+  && fossil open ../fossil.fossil \
+  && fossil checkout --force version-$FOSSIL_VERSION \
+  && cd build \
+  && ../configure --static --disable-fusefs --with-th1-docs --with-th1-hooks \
   && make \
-  && cp fossil /usr/local/bin \
-  && cd / \
-  && rm -rf /tmp/* \
-  && apk del --purge --no-cache \
-        curl gcc make tcl \
-        musl-dev \
-        openssl-dev zlib-dev \
-        openssl-libs-static zlib-static \
+  && make install \
+  && cd /tmp \
+  && rm -rf /usr/local/src \
+  && apk del --purge --no-cache fossil alpine-sdk zlib-dev openssl-dev tcl \
   && rm -f /var/cache/apk/*
 
 VOLUME ["/fossils"]
