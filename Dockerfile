@@ -3,7 +3,7 @@ FROM alpine:3.12
 ENV USERNAME=fossil \
     FOSSIL_VERSION=2.11.1
 
-RUN addgroup -Sg 400 $USERNAME \
+RUN  addgroup -Sg 400 $USERNAME \
   && adduser -Su 400 -G $USERNAME $USERNAME \
   && mkdir /fossils \
   && chown -R $USERNAME:$USERNAME /fossils \
@@ -12,7 +12,6 @@ RUN addgroup -Sg 400 $USERNAME \
         musl-dev \
         openssl-dev zlib-dev \
         openssl-libs-static zlib-static \
-  && mkdir -p /tmp/fossil-build \
   && curl https://www.fossil-scm.org/index.html/tarball/fossil-src.tar.gz?name=fossil-src&r=version-$FOSSIL_VERSION \
      -o /tmp/fossil-src.tar.gz \
   && tar xf /tmp/fossil-src.tar.gz \
@@ -23,10 +22,9 @@ RUN addgroup -Sg 400 $USERNAME \
          --with-th1-docs \
          --with-th1-hooks \
   && make \
-  && cp fossil /usr/bin/local/ \
+  && cp fossil /usr/local/bin \
   && cd / \
-  && rm /tmp/fossil-src.tar.gz \
-  && rm -rf /tmp/fossil-src \
+  && rm -rf /tmp/* \
   && apk del --purge --no-cache \
       curl gcc make tcl \
         musl-dev \
