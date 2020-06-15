@@ -9,7 +9,7 @@ RUN addgroup -Sg 400 $USERNAME \
   && mkdir /fossils \
   && chown -R $USERNAME:$USERNAME /fossils \
   && apk add --no-cache curl \
-  && curl -fLo /tmp/fossil.tar.gz https://www.fossil-scm.org/home/uv/fossil-linux-$FOSSIL_ARCH-$FOSSIL_VERSION.tar.gz \
+  && curl -fsSLo /tmp/fossil.tar.gz https://www.fossil-scm.org/home/uv/fossil-linux-$FOSSIL_ARCH-$FOSSIL_VERSION.tar.gz \
   && tar xvf /tmp/fossil.tar.gz -C /usr/local/bin/ \
   && rm /tmp/fossil.tar.gz \
   && apk del --purge --no-cache curl \
@@ -17,7 +17,7 @@ RUN addgroup -Sg 400 $USERNAME \
 
 VOLUME ["/fossils"]
 
-WORKDIR ["/fossils"]
+WORKDIR "/fossils"
 
 EXPOSE 8181
 
