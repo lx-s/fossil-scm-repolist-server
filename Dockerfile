@@ -5,7 +5,7 @@ ENV USERNAME=fossil \
 
 RUN addgroup -Sg 400 g$USERNAME \
   && adduser -Su 400 -G g$USERNAME $USERNAME \
-  && apk add --no-cache alpine-sdk zlib-dev openssl-dev tcl fossil \
+  && apk add --no-cache gcc make tcl musl-dev openssl-dev zlib-dev openssl-libs-static zlib-static fossil \
   && mkdir -p /usr/local/src/fossils/fossil/build \
   && cd /usr/local/src/fossils \
   && fossil clone http://www.fossil-scm.org/fossil fossil.fossil --user $USERNAME \
@@ -13,12 +13,12 @@ RUN addgroup -Sg 400 g$USERNAME \
   && fossil open ../fossil.fossil \
   && fossil checkout --force version-$FOSSIL_VERSION \
   && cd build \
-  && ../configure --static \
+  && ../configure --static --disable-fusefs --with-th1-docs --with-th1-hooks \
   && make \
   && make install \
   && cd /tmp \
   && rm -rf /usr/local/src \
-  && apk del --purge --no-cache fossil alpine-sdk zlib-dev openssl-dev tcl \
+  && apk del --purge --no-cache fossil gcc make tcl musl-dev openssl-dev zlib-dev openssl-libs-static zlib-static fossil \
   && rm -f /var/cache/apk/*
 
 VOLUME ["/fossils"]
