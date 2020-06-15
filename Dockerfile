@@ -13,7 +13,7 @@ RUN addgroup -Sg 400 g$USERNAME \
   && fossil open ../fossil.fossil \
   && fossil checkout --force version-$FOSSIL_VERSION \
   && cd build \
-  && ../configure --static --disable-fusefs --with-th1-docs --with-th1-hooks \
+  && ../configure --static \
   && make \
   && make install \
   && cd /tmp \
