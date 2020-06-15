@@ -12,8 +12,7 @@ RUN  addgroup -Sg 400 $USERNAME \
         musl-dev \
         openssl-dev zlib-dev \
         openssl-libs-static zlib-static \
-  && curl https://www.fossil-scm.org/index.html/tarball/fossil-src.tar.gz?name=fossil-src&r=version-$FOSSIL_VERSION \
-     -o /tmp/fossil-src.tar.gz \
+  && curl -fsSLo /tmp/fossil-src.tar.gz https://www.fossil-scm.org/index.html/tarball/fossil-src.tar.gz?name=fossil-src&r=version-$FOSSIL_VERSION \
   && tar xf /tmp/fossil-src.tar.gz \
   && cd /tmp/fossil-src/ \
   && ./configure \
