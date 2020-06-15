@@ -13,19 +13,19 @@ RUN  addgroup -Sg 400 $USERNAME \
         openssl-dev zlib-dev \
         openssl-libs-static zlib-static \
   && curl -fsSLo /tmp/fossil-src.tar.gz https://www.fossil-scm.org/index.html/tarball/fossil-src.tar.gz?name=fossil-src&r=version-$FOSSIL_VERSION \
-  && tar xf /tmp/fossil-src.tar.gz \
+  && tar xvf /tmp/fossil-src.tar.gz -C /tmp/ \
   && cd /tmp/fossil-src/ \
   && ./configure \
-         --static \
-         --disable-fusefs \
-         --with-th1-docs \
-         --with-th1-hooks \
+        --static \
+        --disable-fusefs \
+        --with-th1-docs \
+        --with-th1-hooks \
   && make \
   && cp fossil /usr/local/bin \
   && cd / \
   && rm -rf /tmp/* \
   && apk del --purge --no-cache \
-      curl gcc make tcl \
+        curl gcc make tcl \
         musl-dev \
         openssl-dev zlib-dev \
         openssl-libs-static zlib-static \
