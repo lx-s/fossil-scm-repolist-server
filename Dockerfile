@@ -8,7 +8,7 @@ RUN addgroup -Sg 400 g$USERNAME \
   && apk add --no-cache gcc make tcl musl-dev openssl-dev zlib-dev openssl-libs-static zlib-static fossil \
   && mkdir -p /usr/local/src/fossils/fossil/build \
   && cd /usr/local/src/fossils \
-  && fossil clone http://www.fossil-scm.org/fossil fossil.fossil --user $USERNAME \
+  && fossil clone https://www.fossil-scm.org/home fossil.fossil --user $USERNAME \
   && cd fossil \
   && fossil open ../fossil.fossil \
   && fossil checkout --force version-$FOSSIL_VERSION \
