@@ -1,4 +1,4 @@
-FROM alpine:3.13.1
+FROM alpine:3.11.7
 
 ENV USERNAME=fossil \
     FOSSIL_VERSION=2.14
