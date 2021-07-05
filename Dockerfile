@@ -1,7 +1,7 @@
 FROM alpine:3.11.7
 
 ENV USERNAME=fossil \
-    FOSSIL_VERSION=2.15.2
+    FOSSIL_VERSION=2.16
 
 RUN addgroup -Sg 400 g$USERNAME \
   && adduser -Su 400 -G g$USERNAME $USERNAME \
