@@ -14,6 +14,6 @@ WORKDIR "/fossils"
 
 EXPOSE 8181
 
-ENTRYPOINT ["/usr/local/bin/fossil"]
+ENTRYPOINT ["/usr/bin/fossil"]
 
 CMD ["server","--repolist","--port","8181","--skin","ardoise","/fossils"]
